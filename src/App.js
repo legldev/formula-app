@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Module from "./Components/Module";
 import Home from "./Pages/Home";
 import Rankings from "./Pages/Rankings";
-import Drivers from "./Pages/Home";
+import Drivers from "./Pages/Drivers";
 import Teams from "./Pages/Teams";
 import Circuits from "./Pages/Circuits";
 
