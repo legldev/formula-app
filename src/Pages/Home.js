@@ -14,32 +14,25 @@ function Home() {
   const [firstPosition, setFirstPosition] = React.useState([]);
   const [nextRaces, setNextRaces] = React.useState([]);
   const [lastRace, setLastRace] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    api
-      .lastRace()
-      .then((res) => {
-        setLastRace(res.response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    api
-      .nextRace()
-      .then((res) => {
-        setNextRaces(res.response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    api
-      .getDrivers(2022)
-      .then((res) => {
-        setFirstPosition(res.response[0]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const apiCalls = async () => {
+      try {
+        const firstPos = await api.getDrivers(2022);
+        const nextRaces = await api.nextRace();
+        const lastRace = await api.lastRace();
+        setFirstPosition(firstPos.response);
+        setNextRaces(nextRaces.response);
+        setLastRace(lastRace.response);
+      }
+      catch(err) {
+        console.error(err.error)
+      }
+      setLoading(true);
+    };
+
+    apiCalls();
   }, []);
 
   return (
@@ -67,7 +60,7 @@ function Home() {
                 height: 300,
               }}
             >
-              <FirstPosition firstPosition={firstPosition}/>
+              <FirstPosition load={loading} firstPosition={firstPosition[0]} />
             </Paper>
           </Grid>
           <Grid item xs={12} md={4} lg={3}>
@@ -79,12 +72,12 @@ function Home() {
                 height: 300,
               }}
             >
-              <LastRace lastRace={lastRace}/>
+              <LastRace load={loading} lastRace={lastRace[0]} />
             </Paper>
           </Grid>
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-              <NextRaces nextRaces={nextRaces}/>
+              <NextRaces load={loading} nextRaces={nextRaces} />
             </Paper>
           </Grid>
         </Grid>

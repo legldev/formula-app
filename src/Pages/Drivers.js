@@ -21,16 +21,19 @@ function Drivers() {
   const [drivers, setDrivers] = React.useState([]);
 
   React.useEffect(() => {
-    api
-      .getDrivers(2022)
-      .then((res) => {
-        setDrivers(res.response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    const apiCalls = async () => {
+      try {
+        const driverRes = await api.getDrivers(2022);
+        setDrivers(driverRes.response);
+      }
+      catch(err) {
+        console.error(err.error)
+      }
+    };
 
+    apiCalls();
+  }, []);
+  
   return (
     <Box
       component="main"

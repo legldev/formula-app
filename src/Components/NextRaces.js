@@ -1,12 +1,14 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Title from './Title';
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Title from "./Title";
+import Loader from "./Loader";
+import { formatDate } from "../Helpers/utils";
 
-export default function NextRaces({nextRaces}) {
+export default function NextRaces({ nextRaces, load }) {
   return (
     <React.Fragment>
       <Title>Next Races</Title>
@@ -21,15 +23,18 @@ export default function NextRaces({nextRaces}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {nextRaces.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.circuit.name}</TableCell>
-              <TableCell>{row.competition.location.country}</TableCell>
-              <TableCell>{row.competition.location.city}</TableCell>
-              <TableCell align="right">{row.status}</TableCell>
-            </TableRow>
-          ))}
+          {load ? ( Object.keys(nextRaces).map((row) => 
+              <TableRow key={nextRaces[row].id}>
+                <TableCell>{formatDate(nextRaces[row].date)}</TableCell>
+                <TableCell>{nextRaces[row].circuit.name}</TableCell>
+                <TableCell>{nextRaces[row].competition.location.country}</TableCell>
+                <TableCell>{nextRaces[row].competition.location.city}</TableCell>
+                <TableCell align="right">{nextRaces[row].status}</TableCell>
+              </TableRow>
+           )) : (
+              <Loader />
+            )
+          }
         </TableBody>
       </Table>
     </React.Fragment>

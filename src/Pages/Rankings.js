@@ -21,14 +21,17 @@ function Rankings() {
   const [rankings, setRankings] = React.useState([]);
 
   React.useEffect(() => {
-    api
-      .getRankings(2022)
-      .then((res) => {
-        setRankings(res.response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const apiCalls = async () => {
+      try {
+        const rankingsRes = await api.getRankings(2022);
+        setRankings(rankingsRes.response);
+      }
+      catch(err) {
+        console.error(err.error)
+      }
+    };
+
+    apiCalls();
   }, []);
 
   return (
